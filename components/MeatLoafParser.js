@@ -13,7 +13,7 @@ export class MeatLoafParser extends Component {
 
 
   componentDidMount() {
-    return fetch('https://www.cotton-club.fi/ruokalista')
+    return fetch('https://www.kurnii.fi')
       .then((response) => response.text())
       .then((responseText) => {
 
@@ -58,14 +58,52 @@ export class MeatLoafParser extends Component {
   }
 
   parseDom(rootNode) {
-    console.log(rootNode);
-    console.error('hii');
-    let days = rootNode.getElementsByClassName('module pricelist');
 
-    console.error(days)
-    console.error(meatLoafExp.exec(meatLoafCandidates))
+
+    let monday = rootNode.getElementById('monday');
+    let tuesday = rootNode.getElementById('tuesday');
+    let wednesday = rootNode.getElementById('wednesday');
+    let thursday = rootNode.getElementById('thursday');
+    let friday = rootNode.getElementById('friday');
+    let saturday = rootNode.getElementById('saturday');
+    let sunday = rootNode.getElementById('sunday');
+
+    monPlaces = monday.getElementsByClassName('list');
+    monObjects = this.mapToObjects(monPlaces);
+
+    tuePlaces = tuesday.getElementsByClassName('list');
+    tueObjects = this.mapToObjects(tuePlaces);
+
+    wedPlaces = wednesday.getElementsByClassName('list');
+    wedObjects = this.mapToObjects(wedPlaces);
+
+    thuPlaces = thursday.getElementsByClassName('list');
+    thuObjects = this.mapToObjects(thuPlaces);
+
+    friPlaces = friday.getElementsByClassName('list');
+    friObjects = this.mapToObjects(friPlaces);
+
+    satPlaces = saturday.getElementsByClassName('list');
+    satObjects = this.mapToObjects(satObjects);
+
+    sunPlaces = sunday.getElementsByClassName('list');
+    sunObjects = this.mapToObjects(sunPlaces);
+
+    return [monObjects, tueObjects, wedObjects, thuObjects, friObjects, satObjects, sunObjects];
 
   }
+
+  mapToObjects(listOfPlaces) {
+
+    placeObjects = [...listOfPlaces].map(function (item) {
+      containsMeatLoaf = meatLoafExp.test(item);
+      restaurantName = item.getElementById('place').text;
+      return { name: restaurantName, found: containsMeatLoaf };
+    });
+    return placeObjects;
+  }
+
+
 }
 
 
