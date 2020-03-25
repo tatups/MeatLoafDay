@@ -33,7 +33,7 @@ const App: () => React$Node = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Text>hiihuu</Text>
+        <Text>MeatLoafDay v0.1</Text>
         <MeatLoafParser />
       </SafeAreaView>
     </>
