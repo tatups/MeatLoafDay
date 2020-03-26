@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, SectionList, StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import { Text, View, Button, StyleSheet, SafeAreaView, FlatList, AsyncStorage } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 var DomParser = require('react-native-html-parser').DOMParser
 
@@ -8,7 +9,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   item: {
-    padding: 20,
+    padding: 10,
     marginVertical: 8,
   },
   header: {
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   }
 });
 
-function Item({ item }) {
+function Item({ item, searchString }) {
 
   if (item.data.containsMeatLoaf) {
     return (<View style={[styles.item, styles.success]}>
@@ -36,7 +37,7 @@ function Item({ item }) {
   else {
     return (<View style={[styles.item, styles.failure]}>
       <Text style={styles.text}>{item.title}</Text>
-      <Text style={styles.text}>No meatloaf :(</Text>
+      <Text style={styles.text}>No {searchString} :(</Text>
     </View>);
   }
 }
@@ -47,11 +48,21 @@ export class MeatLoafParser extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { isLoading: true }
+    this.state = {
+      isLoading: true,
+      searchString: ''
+    }
   }
 
 
   componentDidMount() {
+
+    this.fetchSearchString();
+
+    this.listener = this.props.navigation.addListener("didBlur", this.fetchSearchString);
+
+
+
     return fetch('https://www.kurnii.fi')
       .then((response) => response.text())
       .then((responseText) => {
@@ -83,26 +94,19 @@ export class MeatLoafParser extends Component {
     }
     else {
 
-
       return (
         <SafeAreaView style={styles.container}>
           <FlatList
             keyExtractor={(item) => item.title}
             data={this.state.dataSource}
             renderItem={({ item }) =>
-              <Item item={item} />
+              <Item item={item} searchString={this.state.searchString} />
 
             }
           />
-        </SafeAreaView>
-        //     <SafeAreaView style={styles.container}>
-        //   <FlatList
-        //     data={DATA}
-        //     renderItem={({ item }) => <Item title={item.title} />}
-        //     keyExtractor={item => item.id}
-        //   />
-        // </SafeAreaView>
+          <Button onPress={() => this.props.navigation.navigate('Settings')} title="Settings" />
 
+        </SafeAreaView>
       );
     }
 
@@ -153,7 +157,7 @@ export class MeatLoafParser extends Component {
 
   mapToObjects(listOfPlaces) {
 
-    let meatLoafExp = /Lihamureke/;
+    let meatLoafExp = new RegExp('/' + this.state.searchString + '/');
 
     var placeObjects = Array.from(listOfPlaces).reduce(function (aggregate, item) {
       var containsMeatLoaf = meatLoafExp.test(item);
@@ -166,11 +170,20 @@ export class MeatLoafParser extends Component {
     }, { containsMeatLoaf: false, listOfPlacesWithMeatLoaf: [] });
 
     placeObjects.listOfPlacesWithMeatLoaf = placeObjects.listOfPlacesWithMeatLoaf.join(', ');
-    placeObjects.listOfPlacesWithMeatLoaf = 'Meatloaf found in: ' + placeObjects.listOfPlacesWithMeatLoaf;
+    placeObjects.listOfPlacesWithMeatLoaf = this.state.searchString + ' found in: ' + placeObjects.listOfPlacesWithMeatLoaf;
     //arr.reduce(callback( accumulator, currentValue[, index[, array]] )[, initialValue])
 
 
     return placeObjects;
+  }
+
+  fetchSearchString() {
+    const key = 'MeatLoafReplacement';
+    AsyncStorage.getItem(key).then(val => {
+      this.setState({ searchString: val ?? 'Lihamureke' });
+    });
+
+
   }
 
 
