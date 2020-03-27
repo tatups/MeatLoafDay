@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, Button, StyleSheet, SafeAreaView, FlatList } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { getSearchString } from './Storage';
 
 var DomParser = require('react-native-html-parser').DOMParser
 
@@ -70,7 +70,8 @@ export class MeatLoafParser extends Component {
   }
 
   componentWillUnmount() {
-    this.focusListener;
+
+    this.focusListener();
   }
 
 
@@ -179,9 +180,8 @@ export class MeatLoafParser extends Component {
    */
   refreshData() {
 
-    const key = 'MeatLoafReplacement';
-    AsyncStorage.getItem(key).then(val => {
-      this.setState({ searchString: val ?? 'Lihamureke' });
+    getSearchString().then(val => {
+      this.setState({ searchString: val });
     });
 
     fetch('https://www.kurnii.fi')

@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
 import { View, Button, SafeAreaView } from 'react-native';
 import { Input } from 'react-native-elements';
-import AsyncStorage from '@react-native-community/async-storage';
-
-const defaultValue = 'Lihamureke'
+import { getSearchString, storeSearchString } from './Storage';
 
 export class SettingPage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            settingValue: defaultValue
+            settingValue: ''
         }
     }
 
-    componentDidMount = () => AsyncStorage.getItem('MeatLoafReplacement')
+    componentDidMount = () => getSearchString()
         .then((value) => {
-
-            if (value != null) {
-                this.setState({ settingValue: value })
-            }
-
+            this.setState({ settingValue: value })
         })
 
     render() {
@@ -51,7 +45,7 @@ export class SettingPage extends Component {
      */
     storeKey = (value) => {
         try {
-            AsyncStorage.setItem('MeatLoafReplacement', value);
+            storeSearchString(value);
             this.setState({ settingValue: value });
         } catch (error) {
         }
@@ -62,12 +56,8 @@ export class SettingPage extends Component {
      */
     retrieveKey = () => {
         try {
-            const value = AsyncStorage.getItem('MeatLoafReplacement');
-            if (value != null) {
-
-                this.setState({ settingValue: value });
-
-            }
+            let value = getSearchString();
+            this.setState({ settingValue: value });
 
         } catch (error) {
         }
