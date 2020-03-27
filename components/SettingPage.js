@@ -45,7 +45,9 @@ export class SettingPage extends Component {
             </SafeAreaView>
         );
     }
-
+    /**
+     * Stores the settingValue in local storage and sets settingValue state to value 
+     */
     storeKey = (value) => {
         try {
             AsyncStorage.setItem('MeatLoafReplacement', value);
@@ -54,6 +56,9 @@ export class SettingPage extends Component {
         }
     };
 
+    /**
+     * Retrieves the settingValue from local storage and sets settingValue state to the retrieved value
+     */
     retrieveKey = () => {
         try {
             const value = AsyncStorage.getItem('MeatLoafReplacement');

@@ -107,7 +107,10 @@ export class MeatLoafParser extends Component {
     }
 
   }
-
+  /**
+   * Parses the DOM from kurnii.fi and transforms it into weekday view objects 
+   * 
+   */
   parseDom(rootNode) {
 
 
@@ -150,7 +153,11 @@ export class MeatLoafParser extends Component {
     return [monData, tueData, wedData, thuData, friData, satData, sunData];
 
   }
-
+  /**
+   * Parses DOM containing list of restaurant names and menus for menus containing the search string
+   * Returns a view object with flag set to true if any of the restaurants contained the search string, 
+   * and string with restaurant names containing the search string 
+   */
   mapToObjects(listOfPlaces) {
 
     let meatLoafExp = new RegExp('/' + this.state.searchString + '/');
@@ -171,7 +178,9 @@ export class MeatLoafParser extends Component {
 
     return placeObjects;
   }
-
+  /**
+   * Loads the search string from local storage and parses the dom to generate the weekly view
+   */
   refreshData() {
 
     const key = 'MeatLoafReplacement';
