@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, Button, TextInput, AsyncStorage, SafeAreaView, FlatList } from 'react-native';
+import { View, Button, TextInput, AsyncStorage, SafeAreaView, FlatList } from 'react-native';
+import { Input } from 'react-native-elements';
 
 const defaultValue = 'Lihamureke'
 
@@ -24,14 +25,20 @@ export class SettingPage extends Component {
     render() {
         return (
             <SafeAreaView>
-                <Text>Settings</Text>
-                <TextInput
-                    style={{
-                        height: 40, borderColor: 'gray', borderWidth: 1,
+                <Input
+                    inputStyle={{
+                        borderBottomWidth: 1
+
                     }}
                     value={this.state.settingValue}
                     onChangeText={(value) => this.storeKey(value)}
+                    label='Search string'
 
+                />
+                <View
+                    style={{
+                        marginTop: 5,
+                    }}
                 />
                 <Button onPress={() => this.props.navigation.navigate('Home')} title="Home" />
 
