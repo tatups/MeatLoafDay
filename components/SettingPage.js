@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Button, TextInput, AsyncStorage, SafeAreaView, FlatList } from 'react-native';
+import { View, Button, SafeAreaView } from 'react-native';
 import { Input } from 'react-native-elements';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const defaultValue = 'Lihamureke'
 

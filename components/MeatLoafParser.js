@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet, SafeAreaView, FlatList, AsyncStorage } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { Text, View, Button, StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 var DomParser = require('react-native-html-parser').DOMParser
 
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 16,
+    flex: 1
   },
   item: {
     padding: 10,
@@ -88,6 +89,7 @@ export class MeatLoafParser extends Component {
       return (
         <SafeAreaView style={styles.container}>
           <FlatList
+
             keyExtractor={(item) => item.title}
             data={this.state.dataSource}
             renderItem={({ item }) =>
@@ -96,7 +98,6 @@ export class MeatLoafParser extends Component {
             }
           />
           <Button onPress={() => this.props.navigation.navigate('Settings')} title="Settings" />
-
         </SafeAreaView>
       );
     }
