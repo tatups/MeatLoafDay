@@ -43,7 +43,6 @@ function Item({ item, searchString }) {
 }
 
 
-
 export class MeatLoafParser extends Component {
 
   constructor(props) {
@@ -53,10 +52,6 @@ export class MeatLoafParser extends Component {
       searchString: ''
     }
   }
-
-
-
-
 
 
   componentDidMount() {
