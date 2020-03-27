@@ -55,32 +55,28 @@ export class MeatLoafParser extends Component {
   }
 
 
+
+
+
+
   componentDidMount() {
 
-    this.fetchSearchString();
 
-    this.listener = this.props.navigation.addListener("didBlur", this.fetchSearchString);
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener("focus", () => {
+      this.refreshData();
+    });
+
+    this.refreshData();
 
 
-
-    return fetch('https://www.kurnii.fi')
-      .then((response) => response.text())
-      .then((responseText) => {
-
-        let doc = new DomParser().parseFromString(responseText, 'text/html')
-        let data = this.parseDom(doc)
-        this.setState({
-          isLoading: false,
-          dataSource: data,
-        }, function () {
-
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
 
   }
+
+  componentWillUnmount() {
+    this.focusListener;
+  }
+
 
 
   render() {
@@ -171,24 +167,40 @@ export class MeatLoafParser extends Component {
 
     placeObjects.listOfPlacesWithMeatLoaf = placeObjects.listOfPlacesWithMeatLoaf.join(', ');
     placeObjects.listOfPlacesWithMeatLoaf = this.state.searchString + ' found in: ' + placeObjects.listOfPlacesWithMeatLoaf;
-    //arr.reduce(callback( accumulator, currentValue[, index[, array]] )[, initialValue])
 
 
     return placeObjects;
   }
 
-  fetchSearchString() {
+  refreshData() {
+
     const key = 'MeatLoafReplacement';
     AsyncStorage.getItem(key).then(val => {
       this.setState({ searchString: val ?? 'Lihamureke' });
     });
 
+    fetch('https://www.kurnii.fi')
+      .then((response) => response.text())
+      .then((responseText) => {
+
+        let doc = new DomParser().parseFromString(responseText, 'text/html')
+        let data = this.parseDom(doc)
+        this.setState({
+          isLoading: false,
+          dataSource: data,
+        }, function () {
+
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
 
   }
 
-
-
-
 }
+
+
 
 

@@ -16,7 +16,7 @@ const App: () => React$Node = () => {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator searchString=''>
+        <Stack.Navigator>
           <Stack.Screen
             name="Home"
             component={MeatLoafParser}

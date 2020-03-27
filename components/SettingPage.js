@@ -16,7 +16,7 @@ export class SettingPage extends Component {
         .then((value) => {
 
             if (value != null) {
-                this.setState({ 'settingValue': value })
+                this.setState({ settingValue: value })
             }
 
         })
