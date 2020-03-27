@@ -155,7 +155,7 @@ export class MeatLoafParser extends Component {
    */
   mapToObjects(listOfPlaces) {
 
-    let meatLoafExp = new RegExp('/' + this.state.searchString + '/');
+    let meatLoafExp = new RegExp(this.state.searchString);
 
     var placeObjects = Array.from(listOfPlaces).reduce(function (aggregate, item) {
       var containsMeatLoaf = meatLoafExp.test(item);
